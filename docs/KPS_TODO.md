@@ -118,13 +118,51 @@
     - [ ] `configPath.deletingLastPathComponent().deletingLastPathComponent().standardizedFileURL == projectRoot.standardizedFileURL`
 
 ### ✅ Week 1 완료 조건
-- [ ] URLParser가 다양한 형식의 BOJ, Programmers URL을 정확히 파싱
-- [ ] **URLParser가 `school.programmers.co.kr`과 `programmers.co.kr` 둘 다 허용** ⭐
-- [ ] ConfigLocator가 하위 폴더에서도 프로젝트 루트를 찾음
-- [ ] ConfigLocator가 모노레포 구조에서도 정상 동작
-- [ ] ConfigLocator가 .git만 있는 경우 적절한 메시지 제공
-- [ ] Config JSON 저장/로드 동작 확인
-- [ ] 모든 단위 테스트 통과
+- [x] URLParser가 다양한 형식의 BOJ, Programmers URL을 정확히 파싱
+- [x] **URLParser가 `school.programmers.co.kr`과 `programmers.co.kr` 둘 다 허용** ⭐
+- [x] ConfigLocator가 하위 폴더에서도 프로젝트 루트를 찾음
+- [x] ConfigLocator가 모노레포 구조에서도 정상 동작
+- [x] ConfigLocator가 .git만 있는 경우 적절한 메시지 제공
+- [x] Config JSON 저장/로드 동작 확인
+- [x] 모든 단위 테스트 통과 (22/22)
+
+### Day 8: 코드 품질 & 스타일 가이드 (2026-01-09)
+- [x] **Swift Style Guide 문서화**
+  - [x] `docs/SWIFT_STYLE_GUIDE.md` 생성 (StyleShare 기반)
+  - [x] 코드 레이아웃, 네이밍, 클로저, 타입 규칙 정의
+  - [x] Access Control, 에러 처리, Concurrency 가이드
+- [x] **SwiftLint 통합**
+  - [x] `.swiftlint.yml` 설정 (120자 제한, custom rules)
+  - [x] SPM Plugin으로 통합 (`SwiftLintBuildToolPlugin`)
+  - [x] `swift build` 시 자동 lint 실행 설정
+  - [x] 위반 시 빌드 중단 (error) / 경고 (warning)
+- [x] **Agent 기반 코드 리뷰**
+  - [x] 11개 Swift 파일 의미적 분석
+  - [x] 문서화 주석 개선 (parameter/return/throws 명세)
+  - [x] High/Medium/Low 우선순위 제안
+- [x] **문서화 개선**
+  - [x] URLParser helper 메서드 문서화 완성
+  - [x] Config save/load 메서드 문서화 완성
+  - [x] ConfigLocator locate 메서드 문서화 완성
+  - [x] ConfigKey enum 문서화 추가
+- [x] **커밋 컨벤션 정립**
+  - [x] `docs/COMMIT_Convention.md` 추가 (Conventional Commits 기반)
+  - [x] `docs/COMMIT_PLAN.md` 제거 (중복)
+- [x] **CLAUDE.md 업데이트**
+  - [x] SwiftLint 사용 가이드 추가
+  - [x] 자동/수동 실행 방법 문서화
+  - [x] CI/CD 통합 안내
+
+**완료 커밋:**
+- `ec59194` - refactor: apply Swift style guide
+- `a8ed195` - chore: integrate SwiftLint via SPM plugin
+- `919ddb0` - docs: update commit convention documentation
+
+**검증 결과:**
+- SwiftLint: 0 violations ✅
+- Build: Success ✅
+- Tests: 22/22 passed ✅
+- Auto-lint on build: Working ✅
 
 ---
 
