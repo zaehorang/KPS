@@ -26,6 +26,9 @@ enum URLParser {
     }
 
     /// Parses BOJ URL path (format: /problem/{number})
+    /// - Parameter path: URL path component
+    /// - Returns: Parsed Problem instance
+    /// - Throws: KPSError.unsupportedURL if path format is invalid
     private static func parseBOJ(path: String) throws -> Problem {
         let components = path.split(separator: "/")
 
@@ -39,6 +42,9 @@ enum URLParser {
     }
 
     /// Parses BOJ short URL path (format: /{number})
+    /// - Parameter path: URL path component
+    /// - Returns: Parsed Problem instance
+    /// - Throws: KPSError.unsupportedURL if path format is invalid
     private static func parseBOJShort(path: String) throws -> Problem {
         let components = path.split(separator: "/")
 
@@ -51,6 +57,9 @@ enum URLParser {
     }
 
     /// Parses Programmers URL path (format: /learn/courses/30/lessons/{number})
+    /// - Parameter path: URL path component
+    /// - Returns: Parsed Problem instance
+    /// - Throws: KPSError.unsupportedURL if path format is invalid
     private static func parseProgrammers(path: String) throws -> Problem {
         let components = path.split(separator: "/")
 

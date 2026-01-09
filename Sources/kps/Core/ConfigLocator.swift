@@ -12,8 +12,11 @@ struct ProjectRoot {
 /// Locates KPS project root by searching for `.kps/config.json`
 enum ConfigLocator {
     /// Searches upward from starting path to find KPS config
+    /// - Parameter startingPath: Directory to start searching from (defaults to current directory)
     /// - Returns: `Result` with `ProjectRoot` on success, or error indicating whether a git repo was found
-    static func locate(from startingPath: URL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)) -> Result<ProjectRoot, KPSError> {
+    static func locate(
+        from startingPath: URL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    ) -> Result<ProjectRoot, KPSError> {
         var currentPath = startingPath.standardizedFileURL
         var gitRepoDetected = false
 

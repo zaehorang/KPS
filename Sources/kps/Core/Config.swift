@@ -7,6 +7,8 @@ struct KPSConfig: Codable {
     var projectName: String
 
     /// Saves config to JSON file with atomic write
+    /// - Parameter url: File URL where config will be saved
+    /// - Throws: KPSError.fileIOError on encoding or write failure
     func save(to url: URL) throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -23,6 +25,9 @@ struct KPSConfig: Codable {
     }
 
     /// Loads config from JSON file
+    /// - Parameter url: File URL to read config from
+    /// - Returns: Parsed KPSConfig instance
+    /// - Throws: KPSError.configParseError on decode failure, KPSError.fileIOError on read failure
     static func load(from url: URL) throws -> KPSConfig {
         do {
             let data = try Data(contentsOf: url)

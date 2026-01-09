@@ -1,3 +1,4 @@
+/// Configuration keys for KPS project settings
 enum ConfigKey: String, CaseIterable {
     case author
     case sourceFolder

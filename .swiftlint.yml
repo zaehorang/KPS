@@ -1,0 +1,127 @@
+# SwiftLint Configuration for KPS
+# Based on docs/SWIFT_STYLE_GUIDE.md
+
+# Included/Excluded paths
+included:
+  - Sources
+
+excluded:
+  - .build
+  - Tests
+
+# Rule Configuration
+opt_in_rules:
+  - empty_count
+  - explicit_init
+  - first_where
+  - sorted_imports
+  - implicit_return
+  - closure_spacing
+  - trailing_closure
+  - force_unwrapping
+
+disabled_rules:
+  - todo
+
+# Line Length
+line_length:
+  warning: 120
+  error: 150
+  ignores_comments: true
+  ignores_urls: true
+
+# Type Name
+type_name:
+  min_length: 2
+  max_length:
+    warning: 50
+    error: 60
+
+# Identifier Name
+identifier_name:
+  min_length:
+    warning: 2
+  max_length:
+    warning: 50
+    error: 60
+  excluded:
+    - id
+    - url
+    - URL
+
+# File Length
+file_length:
+  warning: 500
+  error: 1000
+
+# Function Length
+function_body_length:
+  warning: 50
+  error: 100
+
+# Vertical Whitespace
+vertical_whitespace:
+  max_empty_lines: 1
+
+# Trailing Whitespace
+trailing_whitespace:
+  ignores_empty_lines: false
+  ignores_comments: true
+
+# Closure Parameter Position
+closure_parameter_position:
+  severity: warning
+
+# Colon Spacing (콜론 오른쪽에만 공백)
+colon:
+  flexible_right_spacing: false
+  apply_to_dictionaries: true
+
+# Force Cast (지양)
+force_cast: warning
+force_try: warning
+force_unwrapping: warning
+
+# Implicit Getter (computed property getter 생략)
+implicit_getter: warning
+
+# Trailing Comma (배열/딕셔너리 마지막 요소 후 쉼표)
+trailing_comma:
+  mandatory_comma: false
+
+# Control Statement (if/guard 조건문 괄호 생략)
+control_statement:
+  severity: warning
+
+# Empty Count (isEmpty 사용 권장)
+empty_count: warning
+
+# Sorted Imports (알파벳 순 정렬)
+sorted_imports:
+  severity: warning
+
+# Custom Rules
+custom_rules:
+  # Array<T> 대신 [T] 사용
+  array_syntax:
+    name: "Array syntax"
+    regex: '\bArray<'
+    message: "Use [T] instead of Array<T>"
+    severity: warning
+
+  # Dictionary<T: U> 대신 [T: U] 사용
+  dictionary_syntax:
+    name: "Dictionary syntax"
+    regex: '\bDictionary<'
+    message: "Use [T: U] instead of Dictionary<T, U>"
+    severity: warning
+
+  # () -> () 대신 () -> Void 사용
+  void_return:
+    name: "Void return"
+    regex: '\)\s*->\s*\(\)'
+    message: "Use () -> Void instead of () -> ()"
+    severity: warning
+
+# Reporter
+reporter: "xcode"
