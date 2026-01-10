@@ -21,4 +21,31 @@ enum Console {
     static func error(_ message: String) {
         fputs("❌ \(message)\n", stderr)
     }
+
+    // MARK: - Semantic Helpers
+
+    /// 파일 작업 관련 정보 출력
+    static func fileInfo(_ message: String) {
+        info(message, icon: "📦")
+    }
+
+    /// 저장/커밋 작업 관련 정보 출력
+    static func saveInfo(_ message: String) {
+        info(message, icon: "💾")
+    }
+
+    /// URL 정보 출력
+    static func urlInfo(_ message: String) {
+        info(message, icon: "🔗")
+    }
+
+    /// 배포/푸시 작업 관련 정보 출력
+    static func deployInfo(_ message: String) {
+        info(message, icon: "🚀")
+    }
+
+    /// 사용자 가이드/팁 출력
+    static func tip(_ message: String) {
+        info(message, icon: "💡")
+    }
 }

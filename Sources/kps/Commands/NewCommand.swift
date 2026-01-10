@@ -105,12 +105,12 @@ struct NewCommand: ParsableCommand {
     ///   - filePath: 파일 경로
     private func displaySuccessMessage(for problem: Problem, at filePath: URL) {
         Console.success("File created!")
-        Console.info("File: \(filePath.path)", icon: "📦")
-        Console.info("URL: \(problem.url)", icon: "🔗")
+        Console.fileInfo("File: \(filePath.path)")
+        Console.urlInfo("URL: \(problem.url)")
 
         // 다음 행동 가이드
         let platformFlag = problem.platform == .boj ? "-b" : "-p"
-        Console.info("Next: solve with 'kps solve \(problem.number) \(platformFlag)'", icon: "💡")
+        Console.tip("Next: solve with 'kps solve \(problem.number) \(platformFlag)'")
     }
 
     /// 문자열이 URL 형태인지 판단

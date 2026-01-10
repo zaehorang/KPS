@@ -83,12 +83,12 @@ struct SolveCommand: ParsableCommand {
         try GitExecutor.checkPreflight(at: projectRoot)
 
         // Git add
-        Console.info("Adding file to git...", icon: "📦")
+        Console.fileInfo("Adding file to git...")
         try GitExecutor.add(file: filePath, at: projectRoot)
 
         // Git commit
         let commitMessage = message ?? generateCommitMessage(for: problem)
-        Console.info("Committing changes...", icon: "💾")
+        Console.saveInfo("Committing changes...")
         let hash = try GitExecutor.commit(message: commitMessage, at: projectRoot)
         Console.info("Commit: \(hash)")
 
@@ -107,7 +107,7 @@ struct SolveCommand: ParsableCommand {
         }
 
         do {
-            Console.info("Pushing to remote...", icon: "🚀")
+            Console.deployInfo("Pushing to remote...")
             try GitExecutor.push(at: projectRoot)
             Console.success("Done!")
         } catch {

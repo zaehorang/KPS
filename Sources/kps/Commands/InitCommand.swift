@@ -94,6 +94,6 @@ struct InitCommand: ParsableCommand {
         Console.info("Project: \(projectName)")
         Console.info("Author: \(author)")
         Console.info("Source folder: \(source)")
-        Console.info("Config saved to: .kps/config.json", icon: "💾")
+        Console.saveInfo("Config saved to: .kps/config.json")
     }
 }
