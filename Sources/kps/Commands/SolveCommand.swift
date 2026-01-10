@@ -21,67 +21,118 @@ struct SolveCommand: ParsableCommand {
     var message: String?
 
     func run() throws {
-        // 1. 플랫폼 결정
+        // 1. 문제 및 설정 로드
+        let (problem, projectRoot, config) = try loadProblemContext()
+
+        // 2. 파일 존재 확인
+        let filePath = try validateProblemFile(problem: problem, config: config, projectRoot: projectRoot)
+
+        // 3. Git 커밋
+        let commitHash = try performGitCommit(problem: problem, filePath: filePath, projectRoot: projectRoot.projectRoot)
+
+        // 4. Git 푸시 (옵션)
+        try performGitPush(projectRoot: projectRoot.projectRoot, commitHash: commitHash)
+    }
+
+    /// 문제 정보와 프로젝트 설정 로드
+    /// - Returns: (problem, projectRoot, config) 튜플
+    /// - Throws: 플랫폼 결정, 설정 탐색/로드 실패 시 에러
+    private func loadProblemContext() throws -> (Problem, ProjectRoot, KPSConfig) {
         let platform = try platformOption.requirePlatform()
-
-        // 2. 프로젝트 루트 찾기
+        let problem = Problem(platform: platform, number: number)
         let projectRoot = try ConfigLocator.locate().get()
-
-        // 3. 설정 로드
         let config = try KPSConfig.load(from: projectRoot.configPath)
 
-        // 4. 파일 경로 계산
-        let problem = Problem(platform: platform, number: number)
+        return (problem, projectRoot, config)
+    }
+
+    /// 문제 파일 경로 계산 및 존재 확인
+    /// - Parameters:
+    ///   - problem: 문제 정보
+    ///   - config: 프로젝트 설정
+    ///   - projectRoot: 프로젝트 루트
+    /// - Returns: 검증된 파일 경로
+    /// - Throws: 파일이 존재하지 않으면 KPSError.file(.notFound)
+    private func validateProblemFile(
+        problem: Problem,
+        config: KPSConfig,
+        projectRoot: ProjectRoot
+    ) throws -> URL {
         let filePath = projectRoot.projectRoot
             .appendingPathComponent(config.sourceFolder)
             .appendingPathComponent(problem.platform.folderName)
             .appendingPathComponent(problem.fileName)
 
-        // 5. 파일 존재 확인
         guard FileManager.default.fileExists(atPath: filePath.path) else {
             throw KPSError.file(.notFound(filePath.path))
         }
 
-        // 6. Git preflight check
-        try GitExecutor.checkPreflight(at: projectRoot.projectRoot)
+        return filePath
+    }
 
-        // 7. Git add
+    /// Git add 및 commit 수행
+    /// - Parameters:
+    ///   - problem: 문제 정보 (커밋 메시지 생성용)
+    ///   - filePath: 커밋할 파일 경로
+    ///   - projectRoot: Git 저장소 루트
+    /// - Returns: 생성된 커밋 해시
+    /// - Throws: Git 명령 실패 시 에러
+    private func performGitCommit(
+        problem: Problem,
+        filePath: URL,
+        projectRoot: URL
+    ) throws -> String {
+        // Git preflight check
+        try GitExecutor.checkPreflight(at: projectRoot)
+
+        // Git add
         Console.info("Adding file to git...", icon: "📦")
-        try GitExecutor.add(file: filePath, at: projectRoot.projectRoot)
+        try GitExecutor.add(file: filePath, at: projectRoot)
 
-        // 8. Git commit
-        let commitMessage = message ?? defaultCommitMessage(for: platform, number: number)
+        // Git commit
+        let commitMessage = message ?? generateCommitMessage(for: problem)
         Console.info("Committing changes...", icon: "💾")
-        let hash = try GitExecutor.commit(message: commitMessage, at: projectRoot.projectRoot)
+        let hash = try GitExecutor.commit(message: commitMessage, at: projectRoot)
         Console.info("Commit: \(hash)")
 
-        // 9. Git push (--no-push가 아닐 때)
+        return hash
+    }
+
+    /// Git push 수행 (--no-push 플래그에 따라)
+    /// - Parameters:
+    ///   - projectRoot: Git 저장소 루트
+    ///   - commitHash: 커밋 해시 (로그용)
+    /// - Throws: Push 실패 시 에러 (사용자 친화적 메시지 출력 후)
+    private func performGitPush(projectRoot: URL, commitHash: String) throws {
         if noPush {
             Console.success("Done! (push skipped)")
-        } else {
-            do {
-                Console.info("Pushing to remote...", icon: "🚀")
-                try GitExecutor.push(at: projectRoot.projectRoot)
-                Console.success("Done!")
-            } catch {
-                // Push 실패 시 경고 메시지 출력
-                Console.warning("Commit succeeded, but push failed.")
-                Console.warning("Possible causes:")
-                Console.warning("  • No remote configured: run 'git remote -v'")
-                Console.warning("  • Authentication issue: check your credentials or SSH key")
-                Console.warning("To complete: run 'git push' manually")
-                throw error  // exit 1을 위해 에러 재전파
-            }
+            return
+        }
+
+        do {
+            Console.info("Pushing to remote...", icon: "🚀")
+            try GitExecutor.push(at: projectRoot)
+            Console.success("Done!")
+        } catch {
+            displayPushErrorGuidance()
+            throw error
         }
     }
 
+    /// Push 실패 시 사용자 안내 메시지 출력
+    private func displayPushErrorGuidance() {
+        Console.warning("Commit succeeded, but push failed.")
+        Console.warning("Possible causes:")
+        Console.warning("  • No remote configured: run 'git remote -v'")
+        Console.warning("  • Authentication issue: check your credentials or SSH key")
+        Console.warning("To complete: run 'git push' manually")
+    }
+
     /// 기본 커밋 메시지 생성
-    /// - Parameters:
-    ///   - platform: 플랫폼 (BOJ, Programmers)
-    ///   - number: 문제 번호
+    /// - Parameter problem: 문제 정보
     /// - Returns: 형식: "solve: [Platform] {number}"
-    private func defaultCommitMessage(for platform: Platform, number: String) -> String {
-        let platformName = platform == .boj ? "BOJ" : "Programmers"
-        return "solve: [\(platformName)] \(number)"
+    private func generateCommitMessage(for problem: Problem) -> String {
+        let platformName = problem.platform == .boj ? "BOJ" : "Programmers"
+        return "solve: [\(platformName)] \(problem.number)"
     }
 }
