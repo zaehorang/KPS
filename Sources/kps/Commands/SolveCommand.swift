@@ -58,10 +58,7 @@ struct SolveCommand: ParsableCommand {
         config: KPSConfig,
         projectRoot: ProjectRoot
     ) throws -> URL {
-        let filePath = projectRoot.projectRoot
-            .appendingPathComponent(config.sourceFolder)
-            .appendingPathComponent(problem.platform.folderName)
-            .appendingPathComponent(problem.fileName)
+        let filePath = problem.filePath(projectRoot: projectRoot.projectRoot, config: config)
 
         guard FileManager.default.fileExists(atPath: filePath.path) else {
             throw KPSError.file(.notFound(filePath.path))

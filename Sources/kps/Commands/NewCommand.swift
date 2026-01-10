@@ -69,10 +69,7 @@ struct NewCommand: ParsableCommand {
         config: KPSConfig,
         projectRoot: ProjectRoot
     ) throws -> URL {
-        let sourceDir = projectRoot.projectRoot
-            .appendingPathComponent(config.sourceFolder)
-            .appendingPathComponent(problem.platform.folderName)
-        let filePath = sourceDir.appendingPathComponent(problem.fileName)
+        let filePath = problem.filePath(projectRoot: projectRoot.projectRoot, config: config)
 
         let fileManager = FileManager.default
         try fileManager.ensureFileDoesNotExist(at: filePath)
@@ -91,10 +88,10 @@ struct NewCommand: ParsableCommand {
         config: KPSConfig,
         at filePath: URL
     ) throws {
-        let sourceDir = filePath.deletingLastPathComponent()
         let fileManager = FileManager.default
 
         // 디렉토리 생성
+        let sourceDir = filePath.deletingLastPathComponent()
         try fileManager.createDirectoryIfNeeded(at: sourceDir)
 
         // 템플릿 생성 및 파일 작성
