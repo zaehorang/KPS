@@ -280,7 +280,7 @@ kps config author "New Name"
 ```bash
 # 1. 프로젝트 초기화 (최초 1회)
 git init
-kps init -a "John Doe" -s "Sources"
+kps init -a "zaehorang" -s "Sources"
 
 # 2. 문제 풀이 루프
 kps new https://acmicpc.net/problem/1000
@@ -418,14 +418,8 @@ A: 커밋은 성공했지만 원격 저장소(Remote) 설정 문제나 권한 �
 
 이슈와 PR은 언제나 환영합니다!
 
-로컬 빌드:
-```bash
-swift build
-```
-
 ---
 
 ## 📄 라이선스
 
-MIT License - 자유롭게 사용하세요.
-[LICENSE](https://github.com/zaehorang/kps/blob/main/LICENSE)
+[MIT License](https://github.com/zaehorang/kps/blob/main/LICENSE)

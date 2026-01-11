@@ -1,4 +1,15 @@
-# KPS (Korean Problem Solving) - Agent Guidelines
+# KPS - Agent Guidelines
+
+> **문서 역할**: 이 문서는 AI 에이전트(Claude)를 위한 개발 워크플로우 가이드입니다.
+> - **독자**: AI 에이전트 (Claude)
+> - **목적**: TDD, Tidy First, 커밋 규칙 등 개발 방법론과 작업 흐름 정의
+> - **관련 문서**:
+>   - [ARCHITECTURE.md](docs/ARCHITECTURE.md) - 기술 설계 및 구조
+>   - [DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - 명령어 스펙 및 빌드
+>   - [SWIFT_STYLE_GUIDE.md](docs/SWIFT_STYLE_GUIDE.md) - 코드 스타일
+>   - [COMMIT_Convention.md](docs/COMMIT_Convention.md) - 커밋 규칙
+
+---
 
 ## 프로젝트 개요
 
@@ -14,6 +25,31 @@ KPS는 알고리즘 문제 풀이를 정돈된 개발 기록으로 남기게 해
 - BOJ (acmicpc.net, boj.kr)
 - Programmers (school.programmers.co.kr, programmers.co.kr)
 
+---
+
+## PM (Project Management) Skill 사용
+
+**중요**: 문서 구조가 재편되었습니다. 이제 TODO 체크리스트는 없으며, 개발 히스토리는 CHANGELOG.md에 기록됩니다.
+
+### 자동 실행 (Always)
+- **커밋 완료 후**: `/pm sync` 실행하여 CHANGELOG.md 업데이트
+- **작업 시작 전**: `/pm next` 실행하여 다음 작업 추천 (DEVELOPMENT_GUIDE.md 기준)
+
+### 명시적 요청 시
+- `/pm status` - 진행 상황 리포트 (CHANGELOG.md 기준)
+- `/pm sync` - CHANGELOG.md 업데이트 (완료된 작업 기록)
+- `/pm next` - 다음 작업 추천 (DEVELOPMENT_GUIDE.md 릴리즈 체크리스트 기준)
+- `/pm check` - 문서 일관성 검증 (ARCHITECTURE.md ↔ DEVELOPMENT_GUIDE.md)
+
+### 참조 문서 변경사항
+- ~~docs/KPS_TODO.md~~ → **docs/CHANGELOG.md** (개발 히스토리)
+- ~~docs/KPS_PRD.md~~ → **docs/ARCHITECTURE.md** (프로젝트 정의, 요구사항)
+- ~~docs/KPS_Development_Plan.md~~ → **docs/DEVELOPMENT_GUIDE.md** (명령어 스펙, 릴리즈 체크리스트)
+
+PM Skill 로직은 `.claude/skills/pm/SKILL.md`에 정의되어 있으며, 새 문서 구조에 맞게 업데이트가 필요합니다.
+
+---
+
 ## 기술 스택
 
 | 구성 요소 | 선택 |
@@ -27,167 +63,58 @@ KPS는 알고리즘 문제 풀이를 정돈된 개발 기록으로 남기게 해
 
 ## 프로젝트 구조
 
-```
-KPS/
-├── Package.swift
-├── Sources/
-│   └── KPS/
-│       ├── main.swift
-│       ├── Commands/
-│       │   ├── InitCommand.swift
-│       │   ├── NewCommand.swift
-│       │   ├── SolveCommand.swift
-│       │   ├── ConfigCommand.swift
-│       │   └── PlatformOption.swift
-│       ├── Core/
-│       │   ├── KPSError.swift
-│       │   ├── Config.swift
-│       │   ├── ConfigKey.swift
-│       │   ├── ConfigLocator.swift
-│       │   ├── Platform.swift
-│       │   ├── Problem.swift
-│       │   ├── URLParser.swift
-│       │   ├── Template.swift
-│       │   ├── FileManager+KPS.swift
-│       │   └── GitExecutor.swift
-│       └── Utils/
-│           ├── Console.swift
-│           └── DateFormatter+KPS.swift
-└── Tests/
-    └── KPSTests/
-        ├── URLParserTests.swift
-        ├── ConfigTests.swift
-        ├── ConfigLocatorTests.swift
-        └── TemplateTests.swift
-```
+**프로젝트 구조는 [ARCHITECTURE.md](docs/ARCHITECTURE.md#3-프로젝트-구조)를 참조하세요.**
+
+계층별 책임:
+- **Commands**: ArgumentParser 기반 명령어 구현
+- **Core**: 비즈니스 로직 및 데이터 모델
+- **Utils**: 재사용 가능한 유틸리티
 
 ## 코딩 컨벤션
 
-### Swift 스타일
+**자세한 코드 스타일 가이드는 [SWIFT_STYLE_GUIDE.md](docs/SWIFT_STYLE_GUIDE.md)를 참조하세요.**
+
+### 핵심 원칙
 - Swift API Design Guidelines 준수
 - `guard let` 적극 활용 (early return)
 - `Result` 타입으로 에러 전파 (ConfigLocator)
 - `throws`로 에러 전파 (Commands, Parsers)
-
-### 네이밍
-- 파일: `PascalCase.swift`
-- 타입: `PascalCase`
-- 함수/변수: `camelCase`
-- 상수: `camelCase` (Swift 컨벤션)
-
-### 에러 처리
-```swift
-// 모든 에러는 KPSError로 통일
-enum KPSError: LocalizedError {
-    case configNotFound
-    // ...
-    
-    var errorDescription: String? {
-        switch self {
-        case .configNotFound:
-            return "Config not found. Run 'kps init' first."
-        // ...
-        }
-    }
-}
-```
+- 모든 에러는 `KPSError`로 통일 (자세한 내용: [ARCHITECTURE.md](docs/ARCHITECTURE.md#6-에러-처리))
 
 ### Console 출력
 ```swift
-// stdout: success, info
-// stderr: warning, error
-Console.success("Done!")           // ✅
-Console.info("File created")       // ✔
-Console.warning("Push failed")     // ⚠️ (stderr)
-Console.error("Config not found")  // ❌ (stderr)
+Console.success("Done!")           // ✅ stdout
+Console.info("File created")       // ✔ stdout
+Console.warning("Push failed")     // ⚠️ stderr
+Console.error("Config not found")  // ❌ stderr
 ```
 
 ### SwiftLint
-**SwiftLint는 SPM Plugin으로 통합되어 있습니다.**
 
-#### 자동 실행 (BuildToolPlugin)
+SwiftLint는 SPM Plugin으로 통합되어 있어 `swift build`/`swift test` 시 자동 실행됩니다.
+
+설정 파일: `.swiftlint.yml` (Line length: 120자, 들여쓰기: 4 spaces)
+
+수동 실행 (optional):
 ```bash
-# 빌드 시 자동으로 SwiftLint 실행
-swift build
-
-# 테스트 시에도 자동 실행
-swift test
-```
-
-#### 수동 실행
-```bash
-# 로컬 SwiftLint 사용 (Homebrew 설치 필요)
 swiftlint lint --config .swiftlint.yml
 swiftlint --fix --config .swiftlint.yml
-```
-
-#### 설정 파일
-- `.swiftlint.yml`: `docs/SWIFT_STYLE_GUIDE.md` 기반 설정
-- 주요 규칙:
-  - Line length: 120자
-  - 들여쓰기: 4 spaces
-  - Access control: 필요한 곳만 `private` 명시
-  - `self` 사용: 필요할 때만 (클로저 캡처, 초기화 등)
-
-#### 새 프로젝트에서 사용 시
-SwiftLint는 SPM dependency로 포함되어 있으므로:
-```bash
-git clone <프로젝트>
-swift build  # SwiftLint 자동 다운로드 & 적용
-```
-
-#### CI/CD 통합
-```bash
-# GitHub Actions 등에서 별도 설치 불필요
-swift build  # SwiftLint 자동 실행
 ```
 
 ## 문서화 규칙
 
 ### 주석 작성 원칙
-- 복잡한 로직에는 설명 주석 필수
-- Public API에는 Swift 문서화 주석 (`///`) 필수
+- 복잡한 로직, Public API에는 Swift 문서화 주석 (`///`) 필수
 - 자명한 코드에는 주석 불필요 (코드 자체가 문서)
-- 간결하게 작성 (필요한 내용만)
+- 비자명한 설계 결정(POSIX locale, atomic write 등)에는 설명 추가
 
-### Swift 문서화 주석 스타일
+### Swift 문서화 주석 형식
 ```swift
 /// Brief one-line summary
-///
-/// Additional details if needed
-/// - Parameter name: Parameter description
-/// - Returns: Return value description
+/// - Parameter name: Description
+/// - Returns: Description
 /// - Throws: Error conditions
 func example(name: String) throws -> Result
-```
-
-### 주석이 필요한 경우
-1. **복잡한 알고리즘**: 디렉토리 순회, URL 파싱 등
-2. **비자명한 설계 결정**: POSIX locale 사용, atomic write 사용
-3. **Public API**: 외부에서 호출하는 타입과 메서드
-4. **특수한 에러 처리**: 에러 타입 변환, 특수한 비교 로직
-5. **매직 넘버/문자열**: 하드코딩된 값의 이유
-
-### 주석이 불필요한 경우
-- 자명한 Getter/Setter
-- 단순한 변수 선언
-- 이름만으로 충분히 설명되는 함수
-
-### 예시
-
-**좋은 예:**
-```swift
-/// Parses BOJ URL path (format: /problem/{number})
-private static func parseBOJ(path: String) throws -> Problem {
-    // Course ID "30" represents the coding test practice course
-    guard components[2] == "30" else { ... }
-}
-```
-
-**나쁜 예:**
-```swift
-/// Returns the author name
-var author: String  // 불필요한 주석
 ```
 
 ## 주요 설계 원칙
@@ -256,41 +183,22 @@ Red → Green → Refactor
 
 ### 커밋 규칙
 
+**자세한 커밋 규칙은 [COMMIT_Convention.md](docs/COMMIT_Convention.md)를 참조하세요.**
+
 **커밋 타이밍:**
 - 하루 분량 TODO 완료 시 사용자 검사 요청
-- 사용자 승인 후 커밋 진행
-- 커밋 메시지는 작업 내용만 포함 (Claude 관련 내용 제외)
+- 사용자 승인 후 커밋 진행 (모든 테스트 통과, 린터 경고 해결 필수)
 
-커밋 조건:
-- [ ] 모든 테스트 통과
-- [ ] 컴파일러/린터 경고 해결
-- [ ] 단일 논리적 작업 단위
-
-커밋 메시지 형식:
-```bash
-# 기능 추가
-feat: BOJ URL 파싱 기능 추가
-feat: Config JSON 인코딩/디코딩 추가
-
-# 테스트 추가
-test: URLParser 테스트 추가
-
-# 구조적 변경
-refactor: NewCommand에서 URLParser 추출
-```
+**형식:** `feat:`, `test:`, `refactor:`, `fix:`, `docs:`, `chore:` 사용
 
 ### 작업 워크플로우
 
-"go" 명령 시:
 1. TODO에서 다음 미완료 항목 찾기
-2. 해당 기능의 실패하는 테스트 작성 (TDD Red)
+2. 실패하는 테스트 작성 (TDD Red)
 3. 테스트 통과하는 최소 코드 구현 (TDD Green)
-4. 테스트 통과 확인
-5. 필요시 구조 개선 (Refactor)
-6. **복잡한 로직이나 Public API에 문서화 주석 추가**
-7. **하루 분량 완료 시 사용자에게 검사 요청**
-8. **사용자 승인 시 커밋 메시지 제안 → 사용자 검토 → 커밋 진행**
-9. TODO 항목 체크 `- [x]`
+4. 필요시 구조 개선 (Refactor)
+5. 복잡한 로직/Public API에 문서화 주석 추가
+6. 하루 분량 완료 시 사용자 검사 요청 → 승인 후 커밋
 
 ### 테스트 작성 가이드 (Swift Testing)
 
@@ -298,38 +206,21 @@ refactor: NewCommand에서 URLParser 추출
 import Testing
 @testable import kps
 
-// 테스트 함수에 @Test 속성 사용
 @Test("parse should extract problem number from BOJ URL")
 func parseExtractsProblemNumberFromBOJURL() throws {
-    // Given
     let url = "https://acmicpc.net/problem/1000"
-
-    // When
     let problem = try URLParser.parse(url)
 
-    // Then
     #expect(problem.number == "1000")
     #expect(problem.platform == .boj)
 }
 
 // 에러 테스트
-@Test("parse should throw unsupportedURL for unknown domain")
-func parseThrowsUnsupportedURLForUnknownDomain() {
-    let url = "https://leetcode.com/problems/two-sum"
-
+@Test("parse should throw unsupportedURL")
+func parseThrowsUnsupportedURL() {
     #expect(throws: KPSError.unsupportedURL) {
-        try URLParser.parse(url)
+        try URLParser.parse("https://leetcode.com/problems/two-sum")
     }
-}
-
-// 테스트 스위트 그룹화 (선택 사항)
-@Suite("URL Parser Tests")
-struct URLParserTests {
-    @Test("BOJ URL parsing")
-    func bojURLParsing() throws { }
-
-    @Test("Programmers URL parsing")
-    func programmersURLParsing() throws { }
 }
 ```
 
@@ -358,41 +249,8 @@ swift build -c release
 
 ## 참고 문서
 
-프로젝트 루트의 다음 문서 참조:
-- `KPS_PRD.md` - 요구사항 정의
-- `KPS_Development_Plan.md` - 설계 상세
-- `KPS_TODO.md` - 개발 체크리스트
-
-## 작업 요청 시 참고
-
-1. TODO의 Week/Day 단위로 작업 요청
-2. 새 파일 생성 시 프로젝트 구조 확인
-3. 에러 타입 추가 시 `KPSError.swift`에 통합
-4. 테스트 작성 시 기존 테스트 패턴 따르기
-
-## PM (Project Management) Skill 사용 시점
-
-### 자동 실행 (Always)
-
-**커밋 완료 후**:
-- 커밋이 성공적으로 완료되면 **반드시** `/pm sync` 실행
-- TODO.md를 실제 구현 상태와 자동 동기화
-
-**작업 시작 전**:
-- 사용자가 "다음에 뭘 해야 하나요?" 또는 작업 요청 시 **반드시** `/pm next` 먼저 실행
-- 우선순위와 의존성을 고려한 다음 작업 추천
-
-### 명시적 요청 시
-
-- `/pm status` - 현재 프로젝트 진행 상황 리포트
-- `/pm sync` - TODO.md 동기화
-- `/pm next` - 다음 작업 추천
-- `/pm check` - 문서 간 일관성 검증
-
-### PM Skill 파일 위치
-
-PM의 실제 동작 로직은 `.claude/skills/pm.md`에 정의되어 있습니다.
-- 완료 판정 기준
-- 출력 형식
-- 분석 알고리즘
-- 하이브리드 승인 정책
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - 기술 아키텍처, 프로젝트 구조, 에러 처리 정책
+- **[DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)** - 명령어 스펙, 테스트 전략, 릴리즈 가이드
+- **[SWIFT_STYLE_GUIDE.md](docs/SWIFT_STYLE_GUIDE.md)** - 코드 스타일 가이드
+- **[COMMIT_Convention.md](docs/COMMIT_Convention.md)** - 커밋 규칙
+- **[CHANGELOG.md](docs/CHANGELOG.md)** - 개발 히스토리
