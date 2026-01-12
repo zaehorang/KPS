@@ -36,16 +36,3 @@ jobs:
 
       - name: Build release
         run: swift build -c release
-
-  swiftlint:
-    name: SwiftLint
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install SwiftLint
-        run: brew install swiftlint
-
-      - name: Run SwiftLint
-        run: swiftlint lint --config .swiftlint.yml

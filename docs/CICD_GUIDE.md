@@ -328,6 +328,79 @@ git tag -a v0.2.1 -m "..."  # 새 패치 버전 사용
 
 ---
 
+### SwiftLint Plugin Issue (해결됨)
+
+**증상**: GitHub Actions에서 다음 에러 발생
+
+```
+error: a prebuild command cannot use executables built from source,
+including executable target 'swiftlint'
+error: build planning stopped due to build-tool plugin failures
+```
+
+**발생 시기**: 2026년 1월 12일
+
+**원인 분석:**
+
+1. **환경 확인**
+   - GitHub Actions `macos-latest`: macOS 15 + Xcode 16.4 + Swift 6.1.2
+   - 프로젝트: `swift-tools-version: 5.9`
+
+2. **근본 원인**
+   - Swift 6.1의 SPM에 prebuild command 관련 버그 존재 ([SwiftLint Issue #5376](https://github.com/realm/SwiftLint/issues/5376))
+   - SwiftLint의 기본 플러그인(`realm/SwiftLint`)이 prebuild command 사용
+   - SPM 버그로 인해 CI 환경에서 실행 불가
+
+3. **로컬에서는 정상 동작**
+   - 로컬 macOS: Swift 5.9~6.0.3 사용
+   - SPM 버그 영향 없음
+
+**시도한 해결책 (실패):**
+
+❌ `--disable-sandbox` 플래그 사용 (지원하지 않는 옵션)
+❌ `--disable-build-tool-plugins` 플래그 사용 (지원하지 않는 옵션)
+❌ `sed`로 Package.swift에서 플러그인 제거 (해킹 같은 방법)
+❌ 별도 SwiftLint job 추가 (`brew install swiftlint`) (플러그인 중복)
+
+**최종 해결책: Binary Plugin 사용 (✅ 성공)**
+
+```diff
+ dependencies: [
+     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0"),
+-    .package(url: "https://github.com/realm/SwiftLint.git", from: "0.57.0")
++    .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0")
+ ],
+ targets: [
+     .executableTarget(
+         name: "kps",
+         dependencies: [...],
+         plugins: [
+-            .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")
++            .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+         ]
+     )
+ ]
+```
+
+**Binary Plugin의 장점:**
+- ✅ SwiftLint 바이너리를 직접 사용 (빌드 불필요)
+- ✅ SPM 버그 우회
+- ✅ 로컬/CI 모두 동일하게 동작
+- ✅ `swift build`, `swift test` 시 자동 실행
+- ✅ 별도 `brew install swiftlint` 불필요
+
+**결과:**
+- CI 워크플로우 단순화 (sed 명령 제거)
+- 별도 SwiftLint job 제거
+- build/test job에서 자동으로 lint 실행
+
+**참고 자료:**
+- [SwiftLint SPM Plugin Issue](https://github.com/realm/SwiftLint/issues/5376)
+- [SwiftLintPlugins (Binary)](https://github.com/SimplyDanny/SwiftLintPlugins)
+- [GitHub Actions macOS 15 Readme](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md)
+
+---
+
 ### Release 실패 시
 
 **증상**: 태그 푸시 후 GitHub Release 생성 안 됨
