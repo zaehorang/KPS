@@ -9,7 +9,7 @@
 
 ## [Unreleased]
 
-### Week 3: Git 연동 및 릴리즈 (진행 중)
+### Week 3: Git 연동 및 릴리즈 (완료) ✅
 
 **완료:**
 - Git preflight checks 구현
@@ -34,16 +34,30 @@
   - 명령어 레퍼런스
   - FAQ & Troubleshooting
   - Exit Code 정책
-
-**진행 중:**
-- Git 실패 처리 테스트
-  - add/commit 실패 시나리오
-  - "nothing to commit" 감지
-  - push 실패 시나리오
-  - 파일명 공백/특수문자 테스트
-- 최종 릴리즈 준비
-  - 전체 워크플로우 테스트
-  - v0.1.0 태그 생성
+- **v0.1.0 릴리즈 완료** 🎉
+  - 릴리즈 빌드 성공 (1.7MB)
+  - 모든 단위 테스트 통과 (52개)
+  - SwiftLint 린터 검증 완료
+  - Git 태그 v0.1.0 생성 및 푸시
+  - GitHub Release 생성 (바이너리 업로드)
+  - 저장소 Public 전환
+  - 다운로드 URL 검증 완료
+- 하위 디렉토리 지원 강화
+  - `kps solve`에서 git status 기반 파일 검색
+  - 플랫폼/번호 없이 현재 디렉토리에서 수정된 파일 자동 탐지
+  - 다중 파일 매칭 감지 및 에러 처리
+- 문서 재구성 완료
+  - ARCHITECTURE.md 생성 (프로젝트 정의, 기술 설계)
+  - DEVELOPMENT_GUIDE.md 생성 (명령어 스펙, 릴리즈 가이드)
+  - CHANGELOG.md 생성 (개발 히스토리)
+  - CLAUDE.md 슬림화 및 참조 링크 업데이트
+  - README 배포 상태 업데이트 (다운로드 URL 포함)
+- 코드 품질 개선
+  - SwiftLint 경고 전체 해결 (0 violations)
+  - Console 시맨틱 헬퍼 추가
+  - Process 헬퍼 추출 (GitExecutor)
+  - Problem 파일 경로 헬퍼 추가
+  - Command 책임 분리 (Init, New, Solve)
 
 ---
 

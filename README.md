@@ -78,8 +78,8 @@ KPS는 이 과정을 명령어 중심으로 표준화하여, 개발자가 오직
 #### 옵션 A) `/usr/local/bin` (일반적인 경로, sudo 필요)
 
 ```bash
-# 다운로드 및 설치
-curl -L -o kps https://github.com/zaehorang/KPSTool/releases/download/v0.1.0/kps
+# 최신 버전 다운로드 및 설치
+curl -L -o kps https://github.com/zaehorang/KPSTool/releases/latest/download/kps
 chmod +x kps
 sudo install -m 0755 kps /usr/local/bin/kps
 rm kps  # 다운로드한 파일 삭제
@@ -91,9 +91,9 @@ kps --version
 #### 옵션 B) 홈 디렉토리 bin (sudo 없이 권장)
 
 ```bash
-# 디렉토리 생성 및 다운로드
+# 디렉토리 생성 및 최신 버전 다운로드
 mkdir -p ~/.local/bin
-curl -L -o ~/.local/bin/kps https://github.com/zaehorang/KPSTool/releases/download/v0.1.0/kps
+curl -L -o ~/.local/bin/kps https://github.com/zaehorang/KPSTool/releases/latest/download/kps
 chmod +x ~/.local/bin/kps
 
 # zsh 사용 시 PATH 설정 (한 번만)
