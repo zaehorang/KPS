@@ -191,6 +191,38 @@ Red → Green → Refactor
 
 **형식:** `feat:`, `test:`, `refactor:`, `fix:`, `docs:`, `chore:` 사용
 
+**⚠️ 외부 이슈 참조 금지 (중요)**
+
+커밋 메시지에 외부 오픈소스 프로젝트의 이슈 번호를 **절대 포함하지 마세요.**
+
+**금지 예시:**
+```
+❌ fix: resolve SwiftLint#5376 prebuild error
+❌ chore: workaround for realm/SwiftLint#5376
+❌ References: https://github.com/realm/SwiftLint/issues/5376
+```
+
+**이유:**
+- GitHub가 자동으로 해당 이슈에 커밋을 연결시킴
+- 검증되지 않은 해결책이 외부 이슈 트래커를 오염시킴
+- 오픈소스 프로젝트에 잘못된 정보를 제공할 수 있음
+
+**허용:**
+- 개인 레포 내 이슈 참조: `#123` (이 레포의 이슈)
+- 문서(CICD_GUIDE.md 등)에 링크 작성
+
+**외부 이슈 참조가 필요한 경우:**
+1. 사용자에게 먼저 물어보기
+2. 승인 후에만 커밋 메시지에 포함
+3. CI 검증 완료 후에만 참조
+
+**올바른 접근:**
+```markdown
+✅ 커밋 메시지: 외부 이슈 번호 제외
+✅ CICD_GUIDE.md: 참고 자료로 링크 포함
+✅ 사용자 승인 후: 이슈에 댓글 달기
+```
+
 ### 작업 워크플로우
 
 1. TODO에서 다음 미완료 항목 찾기
