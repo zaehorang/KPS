@@ -6,6 +6,8 @@ enum KPSError: LocalizedError, Equatable {
     case git(Git)
     case file(File)
     case platform(Platform)
+    case history(History)
+    case open(Open)
 
     // MARK: - Config Errors
 
@@ -130,6 +132,35 @@ enum KPSError: LocalizedError, Equatable {
         }
     }
 
+    // MARK: - History Errors
+
+    enum History: Equatable {
+        case noRecentFile
+        case fileDeleted(String)
+
+        var localizedDescription: String {
+            switch self {
+            case .noRecentFile:
+                return "No recent file found. Use 'kps new' to create a problem file first."
+            case .fileDeleted(let path):
+                return "Recent file no longer exists: \(path)"
+            }
+        }
+    }
+
+    // MARK: - Open Errors
+
+    enum Open: Equatable {
+        case commandFailed(String)
+
+        var localizedDescription: String {
+            switch self {
+            case .commandFailed(let message):
+                return "Failed to open file: \(message)"
+            }
+        }
+    }
+
     // MARK: - LocalizedError Conformance
 
     var errorDescription: String? {
@@ -141,6 +172,10 @@ enum KPSError: LocalizedError, Equatable {
         case .file(let error):
             return error.localizedDescription
         case .platform(let error):
+            return error.localizedDescription
+        case .history(let error):
+            return error.localizedDescription
+        case .open(let error):
             return error.localizedDescription
         }
     }
