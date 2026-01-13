@@ -87,3 +87,40 @@ func saveUsesAtomicWrite() throws {
         #expect(FileManager.default.fileExists(atPath: tempURL.path))
     }
 }
+
+@Test("Config encode should include xcodeProjectPath when present")
+func configEncodesXcodeProjectPath() throws {
+    let config = KPSConfig(
+        author: "Test",
+        sourceFolder: "Sources",
+        projectName: "TestProject",
+        xcodeProjectPath: "TestProject.xcodeproj"
+    )
+
+    try withTempFile { tempURL in
+        try config.save(to: tempURL)
+
+        let data = try Data(contentsOf: tempURL)
+        let json = try JSONSerialization.jsonObject(with: data) as? [String: String]
+
+        #expect(json?["xcodeProjectPath"] == "TestProject.xcodeproj")
+    }
+}
+
+@Test("Config decode should handle missing xcodeProjectPath")
+func configDecodesMissingXcodeProjectPath() throws {
+    let jsonString = """
+    {
+      "author": "Test",
+      "projectName": "TestProject",
+      "sourceFolder": "Sources"
+    }
+    """
+
+    try withTempFile { tempURL in
+        try jsonString.write(to: tempURL, atomically: true, encoding: .utf8)
+        let config = try KPSConfig.load(from: tempURL)
+
+        #expect(config.xcodeProjectPath == nil)
+    }
+}
