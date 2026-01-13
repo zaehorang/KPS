@@ -49,6 +49,9 @@ struct ConfigCommand: ParsableCommand {
         Console.info("author: \(config.author)")
         Console.info("sourceFolder: \(config.sourceFolder)")
         Console.info("projectName: \(config.projectName)")
+        if let xcodeProj = config.xcodeProjectPath {
+            Console.info("xcodeProjectPath: \(xcodeProj)")
+        }
     }
 
     /// 특정 키의 값 출력
