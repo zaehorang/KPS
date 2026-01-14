@@ -207,3 +207,107 @@ func historyLoadThrowsOnMissingFile() {
         _ = try KPSHistory.load(from: nonExistentURL)
     }
 }
+
+// MARK: - Solved Field Tests
+
+@Test("HistoryEntry should encode solved field")
+func historyEntryEncodesSolvedField() throws {
+    let entry = HistoryEntry(
+        problemNumber: "1000",
+        platform: .boj,
+        filePath: "Sources/BOJ/1000.swift",
+        timestamp: Date(),
+        solved: true
+    )
+
+    try withTempFile { tempURL in
+        let history = KPSHistory(entries: [entry])
+        try history.save(to: tempURL)
+
+        let data = try Data(contentsOf: tempURL)
+        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        let entries = json?["entries"] as? [[String: Any]]
+
+        #expect(entries?.first?["solved"] as? Bool == true)
+    }
+}
+
+@Test("HistoryEntry should default solved to false")
+func historyEntryDefaultsSolvedToFalse() {
+    let entry = HistoryEntry(
+        problemNumber: "1000",
+        platform: .boj,
+        filePath: "Sources/BOJ/1000.swift",
+        timestamp: Date()
+    )
+
+    #expect(entry.solved == false)
+}
+
+@Test("History should decode entries without solved field")
+func historyDecodesEntriesWithoutSolvedField() throws {
+    let jsonString = """
+    {
+      "entries": [
+        {
+          "problemNumber": "1000",
+          "platform": "boj",
+          "filePath": "Sources/BOJ/1000.swift",
+          "timestamp": "2026-01-13T12:00:00Z"
+        }
+      ]
+    }
+    """
+
+    try withTempFile { tempURL in
+        try jsonString.write(to: tempURL, atomically: true, encoding: .utf8)
+        let history = try KPSHistory.load(from: tempURL)
+
+        #expect(history.entries.count == 1)
+        #expect(history.entries[0].solved == false)
+    }
+}
+
+@Test("markAsSolved should update solved status")
+func markAsSolvedUpdatesStatus() {
+    var history = KPSHistory(entries: [
+        HistoryEntry(
+            problemNumber: "1000",
+            platform: .boj,
+            filePath: "Sources/BOJ/1000.swift",
+            timestamp: Date()
+        ),
+        HistoryEntry(
+            problemNumber: "1001",
+            platform: .boj,
+            filePath: "Sources/BOJ/1001.swift",
+            timestamp: Date()
+        )
+    ])
+
+    #expect(history.entries[0].solved == false)
+    #expect(history.entries[1].solved == false)
+
+    history.markAsSolved(problemNumber: "1000", platform: .boj)
+
+    #expect(history.entries[0].solved == true)
+    #expect(history.entries[1].solved == false)
+}
+
+@Test("markAsSolved should do nothing for non-existent problem")
+func markAsSolvedHandlesNonExistent() {
+    var history = KPSHistory(entries: [
+        HistoryEntry(
+            problemNumber: "1000",
+            platform: .boj,
+            filePath: "Sources/BOJ/1000.swift",
+            timestamp: Date()
+        )
+    ])
+
+    // 존재하지 않는 문제 번호로 markAsSolved 호출
+    history.markAsSolved(problemNumber: "9999", platform: .boj)
+
+    // 아무 변화 없어야 함
+    #expect(history.entries[0].solved == false)
+}
