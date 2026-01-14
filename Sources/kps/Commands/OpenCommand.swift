@@ -66,17 +66,66 @@ struct OpenCommand: ParsableCommand {
     ) throws -> URL {
         // 플랫폼 플래그 필수
         let platform = try platformOption.requirePlatform()
-        let problem = Problem(platform: platform, number: number)
 
-        // 파일 경로 계산
-        let filePath = problem.filePath(projectRoot: projectRoot.projectRoot, config: config)
-
-        // 파일 존재 확인
-        guard FileManager.default.fileExists(atPath: filePath.path) else {
-            throw KPSError.file(.notFound(filePath.path))
-        }
+        // 하위 폴더 포함 파일 찾기
+        let filePath = try findProblemFile(
+            number: number,
+            platform: platform,
+            projectRoot: projectRoot.projectRoot,
+            config: config
+        )
 
         return filePath
+    }
+
+    /// 플랫폼 폴더 내에서 문제 파일 찾기 (하위 폴더 포함)
+    /// - Parameters:
+    ///   - number: 문제 번호
+    ///   - platform: 플랫폼
+    ///   - projectRoot: 프로젝트 루트
+    ///   - config: 프로젝트 설정
+    /// - Returns: 찾은 파일 경로
+    /// - Throws: 플랫폼 폴더 없음, 파일 없음 에러
+    /// - Note: 중복 파일 발견 시 첫 번째 파일 사용
+    private func findProblemFile(
+        number: String,
+        platform: Platform,
+        projectRoot: URL,
+        config: KPSConfig
+    ) throws -> URL {
+        let platformDir = projectRoot
+            .appendingPathComponent(config.sourceFolder)
+            .appendingPathComponent(platform.folderName)
+
+        let fileName = "\(number).swift"
+
+        // 플랫폼 폴더 존재 확인
+        guard FileManager.default.fileExists(atPath: platformDir.path) else {
+            throw KPSError.file(.notFound(platformDir.path))
+        }
+
+        // 하위 폴더 포함 재귀 탐색
+        guard let paths = FileManager.default.subpaths(atPath: platformDir.path) else {
+            throw KPSError.file(.notFound(fileName))
+        }
+
+        // 파일명 매칭
+        let matches = paths.filter { $0.hasSuffix(fileName) }
+
+        guard !matches.isEmpty else {
+            throw KPSError.file(.notFound(fileName))
+        }
+
+        // 중복 발견 시 경고 출력
+        if matches.count > 1 {
+            Console.warning("Multiple files found for \(number):")
+            matches.forEach { Console.warning("  • \($0)") }
+            Console.info("Using first match: \(matches[0])")
+        }
+
+        // 첫 번째 매칭 파일 사용
+        let relativePath = matches[0]
+        return platformDir.appendingPathComponent(relativePath)
     }
 
     /// 최근 파일 열기 (히스토리 기반)
