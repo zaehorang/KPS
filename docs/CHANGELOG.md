@@ -9,20 +9,34 @@
 
 ## [Unreleased]
 
-### Week 4: CI/CD 준비 (진행 중)
+---
+
+## v0.1.1 (2026-01-28)
+
+### Homebrew 배포 지원
 
 **완료:**
-- CI/CD 가이드 문서 작성
-  - CICD_GUIDE.md 생성 (CI/CD 워크플로우 설명서)
-  - 워크플로우 동작 설명 (CI, Release)
-  - 해야 할 것 / 하지 말아야 할 것 가이드
-  - 트러블슈팅 가이드 (CI 실패, Release 실패, 캐시 문제)
-  - 릴리즈 프로세스 상세 설명
-  - DEVELOPMENT_GUIDE에 링크 추가
+- Homebrew 배포 인프라 구축
+  - homebrew-tap 저장소 생성 (`zaehorang/homebrew-tap`)
+  - Formula/kps.rb 작성 (Multi-arch 지원)
+  - Formula 테스트 워크플로우 추가 (macOS 13/14)
+  - homebrew-tap README 작성 (설치 가이드)
+- GitHub Actions 릴리즈 자동화
+  - .github/workflows/release.yml 추가
+  - Intel (x86_64) + Apple Silicon (arm64) 빌드
+  - tar.gz 압축 및 SHA256 계산
+  - GitHub Release 자동 생성
+  - homebrew-tap에 자동 PR 생성 (Formula 업데이트)
+- 문서 업데이트
+  - README.md Homebrew 섹션 활성화
+  - Plan/2026-01-28_homebrew-deployment.md 작성 (배포 계획)
+  - 버전 0.1.1로 업데이트
 
-**진행 중:**
-- GitHub Actions CI 워크플로우 구현
-- GitHub Actions Release 워크플로우 구현
+**설치 방법:**
+```bash
+brew tap zaehorang/tap
+brew install kps
+```
 
 ---
 

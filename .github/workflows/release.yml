@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Get version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version_number=${VERSION#v}" >> $GITHUB_OUTPUT
+
+      - name: Build x86_64
+        run: |
+          swift build -c release --arch x86_64
+          cp .build/x86_64-apple-macosx/release/kps kps-x86_64
+
+      - name: Build arm64
+        run: |
+          swift build -c release --arch arm64
+          cp .build/arm64-apple-macosx/release/kps kps-arm64
+
+      - name: Create Archives
+        run: |
+          tar -czf kps-x86_64-${{ steps.version.outputs.version }}.tar.gz kps-x86_64
+          tar -czf kps-arm64-${{ steps.version.outputs.version }}.tar.gz kps-arm64
+
+      - name: Calculate SHA256
+        id: sha
+        run: |
+          X86_64_SHA=$(shasum -a 256 kps-x86_64-${{ steps.version.outputs.version }}.tar.gz | cut -d ' ' -f 1)
+          ARM64_SHA=$(shasum -a 256 kps-arm64-${{ steps.version.outputs.version }}.tar.gz | cut -d ' ' -f 1)
+          echo "x86_64=$X86_64_SHA" >> $GITHUB_OUTPUT
+          echo "arm64=$ARM64_SHA" >> $GITHUB_OUTPUT
+          echo "X86_64 SHA256: $X86_64_SHA"
+          echo "ARM64 SHA256: $ARM64_SHA"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            kps-x86_64-${{ steps.version.outputs.version }}.tar.gz
+            kps-arm64-${{ steps.version.outputs.version }}.tar.gz
+          generate_release_notes: true
+          body: |
+            ## Installation
+
+            ### Homebrew (Recommended)
+            ```bash
+            brew tap zaehorang/tap
+            brew install kps
+            ```
+
+            ### Manual Installation
+            Download the appropriate binary for your architecture and extract it to your PATH.
+
+            **SHA256 Checksums:**
+            - x86_64: `${{ steps.sha.outputs.x86_64 }}`
+            - arm64: `${{ steps.sha.outputs.arm64 }}`
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout homebrew-tap
+        uses: actions/checkout@v4
+        with:
+          repository: zaehorang/homebrew-tap
+          path: homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+
+      - name: Update Formula
+        run: |
+          cd homebrew-tap
+
+          # Update Formula/kps.rb
+          sed -i '' 's/version ".*"/version "${{ steps.version.outputs.version_number }}"/' Formula/kps.rb
+          sed -i '' 's|url "https://github.com/zaehorang/KPSTool/releases/download/v.*/kps-arm64-.*\.tar\.gz"|url "https://github.com/zaehorang/KPSTool/releases/download/${{ steps.version.outputs.version }}/kps-arm64-${{ steps.version.outputs.version }}.tar.gz"|' Formula/kps.rb
+          sed -i '' 's|url "https://github.com/zaehorang/KPSTool/releases/download/v.*/kps-x86_64-.*\.tar\.gz"|url "https://github.com/zaehorang/KPSTool/releases/download/${{ steps.version.outputs.version }}/kps-x86_64-${{ steps.version.outputs.version }}.tar.gz"|' Formula/kps.rb
+
+          # Update SHA256 hashes
+          # Find the arm64 sha256 line and replace it
+          awk -v arm64_sha="${{ steps.sha.outputs.arm64 }}" -v x86_64_sha="${{ steps.sha.outputs.x86_64 }}" '
+          /if Hardware::CPU.arm\?/ { in_arm=1 }
+          /elsif Hardware::CPU.intel\?/ { in_arm=0; in_intel=1 }
+          /^  end$/ { in_arm=0; in_intel=0 }
+          in_arm && /sha256/ { print "      sha256 \"" arm64_sha "\""; next }
+          in_intel && /sha256/ { print "      sha256 \"" x86_64_sha "\""; next }
+          { print }
+          ' Formula/kps.rb > Formula/kps.rb.tmp
+          mv Formula/kps.rb.tmp Formula/kps.rb
+
+          # Show the changes
+          git diff Formula/kps.rb
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+          branch: update-kps-${{ steps.version.outputs.version }}
+          commit-message: "chore: update kps to ${{ steps.version.outputs.version }}"
+          title: "chore: update kps to ${{ steps.version.outputs.version }}"
+          body: |
+            Auto-generated PR to update kps formula to ${{ steps.version.outputs.version }}
+
+            **Release:** https://github.com/zaehorang/KPSTool/releases/tag/${{ steps.version.outputs.version }}
+
+            **SHA256 Checksums:**
+            - x86_64: `${{ steps.sha.outputs.x86_64 }}`
+            - arm64: `${{ steps.sha.outputs.arm64 }}`
+
+            Please review and merge to publish the new version to Homebrew.
+          delete-branch: true

@@ -106,9 +106,17 @@ kps --version
 
 > **참고**: Homebrew 사용자라면 PATH는 보통 `/opt/homebrew/bin` (Apple Silicon) 또는 `/usr/local/bin` (Intel)에 이미 설정되어 있습니다.
 
-### 2) Homebrew
+### 2) Homebrew (권장)
 
-> Homebrew 배포 준비 중입니다.
+```bash
+brew tap zaehorang/tap
+brew install kps
+```
+
+**업데이트:**
+```bash
+brew upgrade kps
+```
 
 ### 3) 소스 빌드
 
