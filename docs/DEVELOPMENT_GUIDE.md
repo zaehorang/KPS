@@ -564,6 +564,7 @@ brew install kps
 ## 참고
 
 - **기술 아키텍처**: [ARCHITECTURE.md](ARCHITECTURE.md)
+- **릴리즈 가이드**: [RELEASE_GUIDE.md](RELEASE_GUIDE.md) - 버전 배포 프로세스
 - **CI/CD 가이드**: [CICD_GUIDE.md](CICD_GUIDE.md)
 - **에이전트 워크플로우**: [../CLAUDE.md](../CLAUDE.md)
 - **코드 스타일**: [SWIFT_STYLE_GUIDE.md](SWIFT_STYLE_GUIDE.md)

@@ -402,6 +402,7 @@ swift build -c release
 
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - 기술 아키텍처, 프로젝트 구조, 에러 처리 정책
 - **[DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)** - 명령어 스펙, 테스트 전략, 릴리즈 가이드
+- **[RELEASE_GUIDE.md](docs/RELEASE_GUIDE.md)** - 버전 배포 및 릴리즈 프로세스
 - **[SWIFT_STYLE_GUIDE.md](docs/SWIFT_STYLE_GUIDE.md)** - 코드 스타일 가이드
 - **[COMMIT_Convention.md](docs/COMMIT_Convention.md)** - 커밋 규칙
 - **[CHANGELOG.md](docs/CHANGELOG.md)** - 개발 히스토리
