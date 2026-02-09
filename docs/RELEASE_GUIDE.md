@@ -118,7 +118,7 @@ swift test
 - `HOMEBREW_TAP_TOKEN`: homebrew-tap 저장소 접근 권한
 
 **확인 방법:**
-1. https://github.com/zaehorang/KPSTool/settings/secrets/actions
+1. https://github.com/zaehorang/KPS/settings/secrets/actions
 2. `HOMEBREW_TAP_TOKEN` 존재 확인
 3. 만료되지 않았는지 확인 (Personal Access Token)
 
@@ -325,7 +325,7 @@ gh run watch
 **예상 시간:** 2-3분
 
 **진행 상황 확인:**
-1. https://github.com/zaehorang/KPSTool/actions
+1. https://github.com/zaehorang/KPS/actions
 2. "Release" 워크플로우 클릭
 3. 각 단계 진행 상황 확인
 
@@ -420,7 +420,7 @@ gh pr view 1  # PR 번호는 자동 생성된 것
 
 2. **URL:**
    ```ruby
-   url "https://github.com/zaehorang/KPSTool/releases/download/v0.2.0/kps-arm64-v0.2.0.tar.gz"
+   url "https://github.com/zaehorang/KPS/releases/download/v0.2.0/kps-arm64-v0.2.0.tar.gz"
    # ↑ 버전이 올바른지, URL이 실제로 존재하는지
    ```
 
@@ -516,8 +516,8 @@ ls -la Sources/BOJ/
 #### Step 15: 문서 동기화
 
 ```bash
-# KPSTool 저장소로 돌아가기
-cd /path/to/KPSTool
+# KPS 저장소로 돌아가기
+cd /path/to/KPS
 
 # CHANGELOG.md 최종 업데이트 (릴리즈 날짜 등)
 vim docs/CHANGELOG.md
@@ -732,7 +732,7 @@ permissions:
 # Scope: repo (전체)
 
 # 2. Secrets 업데이트
-# https://github.com/zaehorang/KPSTool/settings/secrets/actions
+# https://github.com/zaehorang/KPS/settings/secrets/actions
 # HOMEBREW_TAP_TOKEN 업데이트
 
 # 3. 태그 재푸시 (필요 시)
@@ -797,7 +797,7 @@ brew install kps
 **해결:**
 ```bash
 # 1. 실제 SHA256 확인
-curl -sL https://github.com/zaehorang/KPSTool/releases/download/v0.2.0/kps-arm64-v0.2.0.tar.gz \
+curl -sL https://github.com/zaehorang/KPS/releases/download/v0.2.0/kps-arm64-v0.2.0.tar.gz \
   | shasum -a 256
 
 # 2. Formula 수동 수정

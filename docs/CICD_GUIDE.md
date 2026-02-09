@@ -123,12 +123,12 @@ on:
 ## 설치 방법
 
 ```bash
-curl -L -o kps https://github.com/zaehorang/KPSTool/releases/download/v0.2.0/kps
+curl -L -o kps https://github.com/zaehorang/KPS/releases/download/v0.2.0/kps
 chmod +x kps
 sudo install -m 0755 kps /usr/local/bin/kps
 ```
 
-**Full Changelog**: https://github.com/zaehorang/KPSTool/compare/v0.1.0...v0.2.0
+**Full Changelog**: https://github.com/zaehorang/KPS/compare/v0.1.0...v0.2.0
 ```
 
 ---
@@ -173,8 +173,8 @@ swift build -c release
 
 # 4. 실제 사용 시나리오 테스트
 cd /tmp/test-project
-/path/to/KPSTool/.build/release/kps init -a "Test" -s "Sources"
-/path/to/KPSTool/.build/release/kps new 1000 -b
+/path/to/KPS/.build/release/kps init -a "Test" -s "Sources"
+/path/to/KPS/.build/release/kps new 1000 -b
 ```
 
 ✅ **CHANGELOG 업데이트**
@@ -200,10 +200,10 @@ git tag v0.2              # 패치 버전 누락
 ✅ **릴리즈 생성 후 검증**
 ```bash
 # 1. 다운로드 URL 확인
-curl -L -I https://github.com/zaehorang/KPSTool/releases/download/v0.x.0/kps
+curl -L -I https://github.com/zaehorang/KPS/releases/download/v0.x.0/kps
 
 # 2. 실제 다운로드 및 실행 테스트
-curl -L -o kps-test https://github.com/zaehorang/KPSTool/releases/latest/download/kps
+curl -L -o kps-test https://github.com/zaehorang/KPS/releases/latest/download/kps
 chmod +x kps-test
 ./kps-test --version
 rm kps-test
@@ -291,7 +291,7 @@ git tag -a v0.2.1 -m "..."  # 새 패치 버전 사용
 
 1. **GitHub Actions 탭으로 이동**
    - PR 페이지에서 "Details" 클릭
-   - 또는 `https://github.com/zaehorang/KPSTool/actions`
+   - 또는 `https://github.com/zaehorang/KPS/actions`
 
 2. **실패한 job 확인**
    - test, build-debug, build-release, swiftlint 중 어느 것이 실패했는지 확인
@@ -491,7 +491,7 @@ internal import os
 **해결 방법:**
 
 1. **Actions 탭에서 Release 워크플로우 확인**
-   - `https://github.com/zaehorang/KPSTool/actions/workflows/release.yml`
+   - `https://github.com/zaehorang/KPS/actions/workflows/release.yml`
 
 2. **빌드 실패 확인**
    ```bash
@@ -619,18 +619,18 @@ git push origin v0.x.0
 # ============================================
 
 # 1. GitHub Releases 페이지 확인
-# https://github.com/zaehorang/KPSTool/releases
+# https://github.com/zaehorang/KPS/releases
 
 # 2. 다운로드 URL 확인
-curl -L -I https://github.com/zaehorang/KPSTool/releases/download/v0.x.0/kps
+curl -L -I https://github.com/zaehorang/KPS/releases/download/v0.x.0/kps
 # → 200 OK 또는 302 리다이렉트 확인
 
 # 3. latest URL 확인 (README에서 사용)
-curl -L -I https://github.com/zaehorang/KPSTool/releases/latest/download/kps
+curl -L -I https://github.com/zaehorang/KPS/releases/latest/download/kps
 # → v0.x.0으로 리다이렉트 확인
 
 # 4. 실제 다운로드 및 실행 테스트
-curl -L -o kps-test https://github.com/zaehorang/KPSTool/releases/latest/download/kps
+curl -L -o kps-test https://github.com/zaehorang/KPS/releases/latest/download/kps
 chmod +x kps-test
 ./kps-test --version  # v0.x.0 출력 확인
 rm kps-test
@@ -653,7 +653,7 @@ git tag -a v0.x.0 -m "Release v0.x.0: [설명]" && \
 git push origin v0.x.0
 
 # 3. 검증
-curl -L -o kps-test https://github.com/zaehorang/KPSTool/releases/latest/download/kps && \
+curl -L -o kps-test https://github.com/zaehorang/KPS/releases/latest/download/kps && \
 chmod +x kps-test && \
 ./kps-test --version && \
 rm kps-test
@@ -670,7 +670,7 @@ rm kps-test
 # 방법 1: GitHub에서 릴리즈 삭제
 # ============================================
 
-# 1. https://github.com/zaehorang/KPSTool/releases 접속
+# 1. https://github.com/zaehorang/KPS/releases 접속
 # 2. 문제된 릴리즈 클릭
 # 3. "Delete" 버튼 클릭
 

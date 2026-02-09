@@ -92,7 +92,7 @@ jobs:
 
           # Update Formula/kps.rb (Universal binary - simple sed replacement)
           sed -i '' 's/version ".*"/version "${{ steps.version.outputs.version_number }}"/' Formula/kps.rb
-          sed -i '' 's|url "https://github.com/zaehorang/KPSTool/releases/download/.*/kps-.*\.tar\.gz"|url "https://github.com/zaehorang/KPSTool/releases/download/${{ steps.version.outputs.version }}/kps-${{ steps.version.outputs.version }}.tar.gz"|' Formula/kps.rb
+          sed -i '' 's|url "https://github.com/zaehorang/KPS/releases/download/.*/kps-.*\.tar\.gz"|url "https://github.com/zaehorang/KPS/releases/download/${{ steps.version.outputs.version }}/kps-${{ steps.version.outputs.version }}.tar.gz"|' Formula/kps.rb
           sed -i '' 's/sha256 ".*"/sha256 "${{ steps.sha.outputs.sha256 }}"/' Formula/kps.rb
 
           # Show the changes
@@ -109,7 +109,7 @@ jobs:
           body: |
             Auto-generated PR to update kps formula to ${{ steps.version.outputs.version }}
 
-            **Release:** https://github.com/zaehorang/KPSTool/releases/tag/${{ steps.version.outputs.version }}
+            **Release:** https://github.com/zaehorang/KPS/releases/tag/${{ steps.version.outputs.version }}
 
             **SHA256 Checksum:**
             - Universal (arm64 + x86_64): `${{ steps.sha.outputs.sha256 }}`

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install Git hooks for KPSTool
+# Install Git hooks for KPS
 
 set -e
 

@@ -11,7 +11,7 @@
 
 **배포 결과:**
 - ✅ homebrew-tap 저장소: https://github.com/zaehorang/homebrew-tap
-- ✅ GitHub Release: https://github.com/zaehorang/KPSTool/releases/tag/v0.1.1
+- ✅ GitHub Release: https://github.com/zaehorang/KPS/releases/tag/v0.1.1
 - ✅ Homebrew 설치 검증 완료
 
 **설치 명령어:**
@@ -55,7 +55,7 @@ brew install kps
 ### 저장소 구조
 
 ```
-KPSTool (main repo)
+KPS (main repo)
 ├── .github/workflows/
 │   └── release.yml          # 릴리즈 자동화
 ├── Sources/
@@ -132,11 +132,11 @@ Developer                    GitHub Actions                 User
 
 - [ ] GitHub Settings → Developer settings → Personal access tokens → Generate new token
 - [ ] Scope: `repo` (homebrew-tap 저장소 접근 권한)
-- [ ] Token을 KPSTool 저장소 Secrets에 추가
+- [ ] Token을 KPS 저장소 Secrets에 추가
   - Name: `HOMEBREW_TAP_TOKEN`
   - Value: [생성된 토큰]
 
-#### C. KPSTool 저장소 업데이트
+#### C. KPS 저장소 업데이트
 
 - [ ] `.github/workflows/release.yml` 작성
 - [ ] 버전 출력 확인 (`kps --version`)
@@ -192,16 +192,16 @@ Developer                    GitHub Actions                 User
 ```ruby
 class Kps < Formula
   desc "Algorithm problem-solving tracker for BOJ & Programmers"
-  homepage "https://github.com/zaehorang/KPSTool"
+  homepage "https://github.com/zaehorang/KPS"
   version "0.1.1"
   license "MIT"  # LICENSE 파일 확인 후 설정
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/zaehorang/KPSTool/releases/download/v0.1.1/kps-arm64-v0.1.1.tar.gz"
+      url "https://github.com/zaehorang/KPS/releases/download/v0.1.1/kps-arm64-v0.1.1.tar.gz"
       sha256 "PLACEHOLDER_ARM64_SHA256"  # 실제 빌드 후 업데이트
     elsif Hardware::CPU.intel?
-      url "https://github.com/zaehorang/KPSTool/releases/download/v0.1.1/kps-x86_64-v0.1.1.tar.gz"
+      url "https://github.com/zaehorang/KPS/releases/download/v0.1.1/kps-x86_64-v0.1.1.tar.gz"
       sha256 "PLACEHOLDER_X86_64_SHA256"  # 실제 빌드 후 업데이트
     end
   end
