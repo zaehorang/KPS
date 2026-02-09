@@ -580,7 +580,7 @@ brew install kps
 
 **배포 결과:**
 - homebrew-tap: https://github.com/zaehorang/homebrew-tap
-- Release: https://github.com/zaehorang/KPSTool/releases/tag/v0.1.1
+- Release: https://github.com/zaehorang/KPS/releases/tag/v0.1.1
 
 ---
 

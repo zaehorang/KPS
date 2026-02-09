@@ -9,6 +9,14 @@
 
 ## [Unreleased]
 
+### GitHub 저장소 이름 변경
+
+**완료:**
+- GitHub 저장소 이름 변경 반영: `KPSTool` → `KPS`
+  - Git remote URL 업데이트
+  - 프로젝트 전체 URL 참조 일괄 수정 (8개 파일)
+  - 영향 범위: README.md, release.yml, 문서(5개), 스크립트(1개)
+
 ---
 
 ## v0.2.0 (2026-01-28)

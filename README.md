@@ -3,9 +3,9 @@
 <p align="center">
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.9+-orange.svg" alt="Swift 5.9+"></a>
   <a href="https://www.apple.com/macos"><img src="https://img.shields.io/badge/macOS-13.0+-blue.svg" alt="macOS 13.0+"></a>
-  <a href="https://github.com/zaehorang/KPSTool/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
-  <a href="https://github.com/zaehorang/KPSTool/releases"><img src="https://img.shields.io/github/v/release/zaehorang/KPSTool" alt="GitHub release"></a>
-  <a href="https://github.com/zaehorang/KPSTool/issues"><img src="https://img.shields.io/github/issues/zaehorang/KPSTool" alt="GitHub issues"></a>
+  <a href="https://github.com/zaehorang/KPS/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
+  <a href="https://github.com/zaehorang/KPS/releases"><img src="https://img.shields.io/github/v/release/zaehorang/KPS" alt="GitHub release"></a>
+  <a href="https://github.com/zaehorang/KPS/issues"><img src="https://img.shields.io/github/issues/zaehorang/KPS" alt="GitHub issues"></a>
 </p>
 
 > 알고리즘 문제 풀이를 **정돈된 개발 기록**으로 남기게 해주는 Swift CLI 도구입니다.
@@ -73,13 +73,13 @@ KPS는 이 과정을 명령어 중심으로 표준화하여, 개발자가 오직
 
 ### 1) Releases 다운로드 (권장)
 
-[Releases 페이지](https://github.com/zaehorang/KPSTool/releases)에서 최신 버전을 다운로드하거나, 아래 명령어로 바로 설치할 수 있습니다.
+[Releases 페이지](https://github.com/zaehorang/KPS/releases)에서 최신 버전을 다운로드하거나, 아래 명령어로 바로 설치할 수 있습니다.
 
 #### 옵션 A) `/usr/local/bin` (일반적인 경로, sudo 필요)
 
 ```bash
 # 최신 버전 다운로드 및 설치
-curl -L -o kps https://github.com/zaehorang/KPSTool/releases/latest/download/kps
+curl -L -o kps https://github.com/zaehorang/KPS/releases/latest/download/kps
 chmod +x kps
 sudo install -m 0755 kps /usr/local/bin/kps
 rm kps  # 다운로드한 파일 삭제
@@ -93,7 +93,7 @@ kps --version
 ```bash
 # 디렉토리 생성 및 최신 버전 다운로드
 mkdir -p ~/.local/bin
-curl -L -o ~/.local/bin/kps https://github.com/zaehorang/KPSTool/releases/latest/download/kps
+curl -L -o ~/.local/bin/kps https://github.com/zaehorang/KPS/releases/latest/download/kps
 chmod +x ~/.local/bin/kps
 
 # zsh 사용 시 PATH 설정 (한 번만)
@@ -121,8 +121,8 @@ brew upgrade kps
 ### 3) 소스 빌드
 
 ```bash
-git clone https://github.com/zaehorang/KPSTool.git
-cd KPSTool
+git clone https://github.com/zaehorang/KPS.git
+cd KPS
 swift build -c release
 sudo install -m 0755 .build/release/kps /usr/local/bin/kps
 ```
@@ -531,4 +531,4 @@ xcode-select --install
 
 ## 📄 라이선스
 
-[MIT License](https://github.com/zaehorang/KPSTool/blob/main/LICENSE)
+[MIT License](https://github.com/zaehorang/KPS/blob/main/LICENSE)

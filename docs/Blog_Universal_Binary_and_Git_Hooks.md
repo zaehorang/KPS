@@ -44,7 +44,7 @@ brew install kps
 ```ruby
 class Kps < Formula
   desc "Algorithm problem-solving tracker"
-  homepage "https://github.com/zaehorang/KPSTool"
+  homepage "https://github.com/zaehorang/KPS"
   version "0.1.1"
   license "MIT"
 
@@ -384,11 +384,11 @@ sed -i '' 's/sha256 ".*"/sha256 "$SHA256"/' Formula/kps.rb
 ```ruby
 class Kps < Formula
   desc "Algorithm problem-solving tracker for BOJ & Programmers"
-  homepage "https://github.com/zaehorang/KPSTool"
+  homepage "https://github.com/zaehorang/KPS"
   version "0.2.0"
   license "MIT"
 
-  url "https://github.com/zaehorang/KPSTool/releases/download/v0.2.0/kps-v0.2.0.tar.gz"
+  url "https://github.com/zaehorang/KPS/releases/download/v0.2.0/kps-v0.2.0.tar.gz"
   sha256 "6679a23199cc1bfd3fda32b8df55d9c9ed3dc15e8b514109d62135da4969e807"
 
   def install
@@ -752,7 +752,7 @@ CODE_VERSION=$(grep -E 'version: "[0-9]+\.[0-9]+\.[0-9]+"' Sources/kps/KPS.swift
 
 **디렉토리 구조:**
 ```
-KPSTool/
+KPS/
 ├── scripts/
 │   ├── hooks/
 │   │   └── pre-push          # Hook 파일 (Git 추적)
@@ -915,8 +915,8 @@ git push --no-verify origin v0.3.0
 
 \`\`\`bash
 # 1. 저장소 클론
-git clone https://github.com/zaehorang/KPSTool.git
-cd KPSTool
+git clone https://github.com/zaehorang/KPS.git
+cd KPS
 
 # 2. Git hooks 설치
 ./scripts/install-hooks.sh
@@ -1110,7 +1110,7 @@ Hook은 로컬에서만 작동하므로, CI에서 한 번 더 검증:
 ## 참고 자료
 
 ### 코드 저장소
-- KPSTool: https://github.com/zaehorang/KPSTool
+- KPS: https://github.com/zaehorang/KPS
 - homebrew-tap: https://github.com/zaehorang/homebrew-tap
 
 ### 관련 문서
