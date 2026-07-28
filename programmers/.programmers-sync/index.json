@@ -7,8 +7,8 @@
       "title": "n의 배수",
       "titleSlug": "181937_n의_배수",
       "difficulty": "-",
-      "url": "https://school.programmers.co.kr/learn/courses/30/lessons/181937",
-      "lastSyncedAt": "2026-07-28T01:13:54.666Z",
+      "url": "https://school.programmers.co.kr/learn/courses/30/lessons/181937?language=python3",
+      "lastSyncedAt": "2026-07-28T01:15:11.019Z",
       "firstAcceptedDate": "2026-07-28",
       "lastAcceptedDate": "2026-07-28",
       "languages": {
@@ -19,6 +19,14 @@
           "lastSyncedAt": "2026-07-28T01:13:54.666Z",
           "firstAcceptedDate": "2026-07-28",
           "lastAcceptedDate": "2026-07-28"
+        },
+        "python3": {
+          "solutionPath": "programmers/python/181937_n의_배수.py",
+          "lastAcceptedSourceId": "programmers:181937:python3:03bm8kt",
+          "solutionRevisionNumber": 1,
+          "lastSyncedAt": "2026-07-28T01:15:11.019Z",
+          "firstAcceptedDate": "2026-07-28",
+          "lastAcceptedDate": "2026-07-28"
         }
       }
     }
@@ -26,7 +34,7 @@
   "activity": {
     "days": {
       "2026-07-28": {
-        "acceptedCount": 1,
+        "acceptedCount": 2,
         "newProblemCount": 1
       }
     }
