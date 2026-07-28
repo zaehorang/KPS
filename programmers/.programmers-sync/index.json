@@ -8,15 +8,15 @@
       "titleSlug": "12939_최댓값과_최솟값",
       "difficulty": "-",
       "url": "https://school.programmers.co.kr/learn/courses/30/lessons/12939#",
-      "lastSyncedAt": "2026-07-28T10:55:49.575Z",
+      "lastSyncedAt": "2026-07-28T10:58:16.646Z",
       "firstAcceptedDate": "2026-07-28",
       "lastAcceptedDate": "2026-07-28",
       "languages": {
         "python3": {
           "solutionPath": "programmers/python/12939_최댓값과_최솟값.py",
-          "lastAcceptedSourceId": "programmers:12939:python3:00o2dkj",
-          "solutionRevisionNumber": 1,
-          "lastSyncedAt": "2026-07-28T10:55:49.575Z",
+          "lastAcceptedSourceId": "programmers:12939:python3:06z7ukv",
+          "solutionRevisionNumber": 2,
+          "lastSyncedAt": "2026-07-28T10:58:16.646Z",
           "firstAcceptedDate": "2026-07-28",
           "lastAcceptedDate": "2026-07-28"
         }
@@ -55,7 +55,7 @@
   "activity": {
     "days": {
       "2026-07-28": {
-        "acceptedCount": 3,
+        "acceptedCount": 4,
         "newProblemCount": 2
       }
     }

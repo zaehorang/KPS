@@ -1,7 +1,4 @@
 def solution(s):
-    arr = s.split(' ')
-    nums = list(map(int, arr))
+    nums = [int(x) for x in s.split()]
+    return f"{min(nums)} {max(nums)}"
     
-    minN = min(nums)
-    maxN = max(nums)
-    return f"{minN} {maxN}"
