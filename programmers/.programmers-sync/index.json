@@ -1,0 +1,34 @@
+{
+  "version": 4,
+  "problems": [
+    {
+      "problemId": "181937",
+      "frontendId": "181937",
+      "title": "n의 배수",
+      "titleSlug": "181937_n의_배수",
+      "difficulty": "-",
+      "url": "https://school.programmers.co.kr/learn/courses/30/lessons/181937",
+      "lastSyncedAt": "2026-07-28T01:13:54.666Z",
+      "firstAcceptedDate": "2026-07-28",
+      "lastAcceptedDate": "2026-07-28",
+      "languages": {
+        "swift": {
+          "solutionPath": "programmers/swift/181937_n의_배수.swift",
+          "lastAcceptedSourceId": "programmers:181937:swift:1m31g0a",
+          "solutionRevisionNumber": 1,
+          "lastSyncedAt": "2026-07-28T01:13:54.666Z",
+          "firstAcceptedDate": "2026-07-28",
+          "lastAcceptedDate": "2026-07-28"
+        }
+      }
+    }
+  ],
+  "activity": {
+    "days": {
+      "2026-07-28": {
+        "acceptedCount": 1,
+        "newProblemCount": 1
+      }
+    }
+  }
+}
